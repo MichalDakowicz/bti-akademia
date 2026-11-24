@@ -1,0 +1,77 @@
+BANK.ai={name:'Sztuczna inteligencja (AI)',icon:'🧠',color:'#047857',
+intro:'Uczenie maszynowe, metryki, sieci neuronowe i LLM. Pytania łączą teorię (założenia modeli, overfitting) z praktyką (RAG, halucynacje, etyka).',
+lessons:[
+{h:'Mapa pojęć: AI ⊃ ML ⊃ DL',html:`
+<figure class="diagram"><svg viewBox="0 0 640 260" width="640" role="img" aria-label="AI, ML, DL">
+<circle cx="200" cy="130" r="120" fill="#047857" opacity=".12" stroke="#047857"/><circle cx="200" cy="155" r="85" fill="#047857" opacity=".2" stroke="#047857"/><circle cx="200" cy="178" r="50" fill="#047857" opacity=".4" stroke="#047857"/>
+<g font-size="13" font-weight="800" text-anchor="middle"><text x="200" y="40">Sztuczna inteligencja (AI)</text><text x="200" y="104">Uczenie maszynowe (ML)</text><text x="200" y="172">Deep Learning</text><text x="200" y="190" font-size="10" font-weight="500" class="t2">sieci neuronowe</text></g>
+<g font-size="13"><text x="360" y="60" font-weight="800">AI</text><text x="395" y="60" class="t2">każda technika naśladująca inteligencję (też reguły, wyszukiwanie)</text>
+<text x="360" y="120" font-weight="800">ML</text><text x="395" y="120" class="t2">algorytmy uczące się wzorców z danych</text>
+<text x="360" y="180" font-weight="800">DL</text><text x="395" y="180" class="t2">głębokie sieci: obrazy, mowa, język, LLM</text></g></svg></figure>
+<table><tr><th>Rodzaj uczenia</th><th>Dane</th><th>Przykłady</th></tr>
+<tr><td><b>Nadzorowane</b></td><td>wejście + <b>etykieta</b></td><td>regresja liniowa/logistyczna, drzewa, kNN, SVM, sieci</td></tr>
+<tr><td><b>Nienadzorowane</b></td><td>brak etykiet</td><td>k-means, PCA, klasteryzacja hierarchiczna</td></tr>
+<tr><td><b>Ze wzmocnieniem (RL)</b></td><td>agent + środowisko + nagroda</td><td>gry, robotyka, RLHF</td></tr></table>
+<p><b>Klasyfikacja</b> – przewiduje kategorię (spam / nie spam). <b>Regresja</b> – przewiduje liczbę (cena mieszkania).</p>`},
+{h:'Dane, overfitting, metryki',html:`
+<figure class="diagram"><svg viewBox="0 0 640 220" width="640" role="img" aria-label="Overfitting">
+<g font-size="12" text-anchor="middle" font-weight="700"><text x="110" y="18">Underfitting</text><text x="320" y="18">Dobre dopasowanie</text><text x="530" y="18">Overfitting</text></g>
+<g>
+<rect class="bx" x="10" y="28" width="200" height="140" rx="8"/><rect class="bx" x="220" y="28" width="200" height="140" rx="8"/><rect class="bx" x="430" y="28" width="200" height="140" rx="8"/>
+<g fill="#047857"><circle cx="30" cy="140" r="4"/><circle cx="55" cy="110" r="4"/><circle cx="80" cy="130" r="4"/><circle cx="105" cy="70" r="4"/><circle cx="130" cy="90" r="4"/><circle cx="155" cy="55" r="4"/><circle cx="185" cy="80" r="4"/>
+<circle cx="240" cy="140" r="4"/><circle cx="265" cy="110" r="4"/><circle cx="290" cy="130" r="4"/><circle cx="315" cy="70" r="4"/><circle cx="340" cy="90" r="4"/><circle cx="365" cy="55" r="4"/><circle cx="395" cy="80" r="4"/>
+<circle cx="450" cy="140" r="4"/><circle cx="475" cy="110" r="4"/><circle cx="500" cy="130" r="4"/><circle cx="525" cy="70" r="4"/><circle cx="550" cy="90" r="4"/><circle cx="575" cy="55" r="4"/><circle cx="605" cy="80" r="4"/></g>
+<path d="M20 115L200 90" stroke="#c2410c" stroke-width="2.5" fill="none"/><path d="M230 140C290 120 300 85 330 80S380 60 410 85" stroke="#c2410c" stroke-width="2.5" fill="none"/><path d="M440 140L475 110L500 130L525 70L550 90L575 55L620 80" stroke="#c2410c" stroke-width="2.5" fill="none"/></g>
+<g font-size="12" class="t2" text-anchor="middle"><text x="110" y="188">model za prosty: duży błąd</text><text x="110" y="204">i na treningu, i na teście</text><text x="320" y="188">łapie trend, nie szum</text><text x="530" y="188">zapamiętał dane treningowe,</text><text x="530" y="204">źle generalizuje na nowe</text></g></svg></figure>
+<ul><li><b>Podział danych</b>: trening (uczenie) / walidacja (dobór hiperparametrów) / <b>test</b> (końcowa ocena, używany raz).</li><li><b>Data leakage</b> – informacja z testu „przecieka” do treningu → zawyżony wynik.</li><li>Walka z overfittingiem: więcej danych, regularyzacja (L1/L2), dropout, uproszczenie modelu, early stopping, <b>cross-validation</b>.</li></ul>
+<h4>Metryki klasyfikacji (macierz pomyłek)</h4>
+<table><tr><th></th><th>Przewidziano: TAK</th><th>Przewidziano: NIE</th></tr><tr><td><b>Naprawdę TAK</b></td><td>TP</td><td>FN</td></tr><tr><td><b>Naprawdę NIE</b></td><td>FP</td><td>TN</td></tr></table>
+<ul><li><b>Precision</b> = TP / (TP + FP): „z tych, które uznałem za pozytywne, ile naprawdę?”</li><li><b>Recall</b> = TP / (TP + FN): „ile prawdziwych pozytywów znalazłem?”</li><li><b>F1</b> = średnia <b>harmoniczna</b> precision i recall.</li><li><b>Accuracy</b> myli przy niezbalansowanych klasach (99% „zdrowych” → model „zawsze zdrowy” ma 99%).</li></ul>
+<div class="callout tip">Przykład: TP=40, FP=10, FN=20 → precision = 40/50 = <b>0,8</b>, recall = 40/60 ≈ <b>0,67</b>.</div>`},
+{h:'Regresja liniowa i uczenie gradientowe',html:`
+<p>Regresja liniowa: <code>y = w·x + b</code>. Dopasowanie minimalizuje błąd średniokwadratowy (MSE).</p>
+<h4>Założenia regresji liniowej (OLS)</h4>
+<ul><li><b>Liniowość</b> związku między zmiennymi niezależnymi i zależną.</li><li><b>Niezależność</b> obserwacji (reszt).</li><li><b>Homoskedastyczność</b>: stała wariancja reszt.</li><li><b>Normalność reszt</b> (ważna głównie dla wnioskowania statystycznego).</li><li><b>Brak współliniowości</b> między predyktorami.</li></ul>
+<div class="callout trap">Zmienne niezależne <b>nie muszą</b> mieć rozkładu normalnego. Normalność dotyczy <b>reszt</b>, a nie cech.</div>
+<h4>Spadek gradientu</h4>
+<figure class="diagram"><svg viewBox="0 0 600 200" width="600" role="img" aria-label="Gradient descent">
+<path d="M40 30C120 190 200 190 300 190S480 190 560 30" fill="none" stroke="#6b665c" stroke-width="2.5"/>
+<g fill="#047857"><circle cx="90" cy="80" r="6"/><circle cx="140" cy="140" r="6"/><circle cx="190" cy="170" r="6"/><circle cx="240" cy="184" r="6"/><circle cx="290" cy="189" r="6"/></g>
+<path d="M90 80L140 140L190 170L240 184L290 189" fill="none" stroke="#047857" stroke-width="1.6" stroke-dasharray="4 3"/>
+<text x="300" y="20" text-anchor="middle" font-size="13" font-weight="700">funkcja straty (loss) – szukamy minimum</text>
+<text x="300" y="116" text-anchor="middle" font-size="12" class="t2">w ← w − α · ∇Loss   (α = learning rate)</text></svg></figure>
+<ul><li>Za duży <b>learning rate</b> → skoki przez minimum, rozbieżność. Za mały → bardzo wolno.</li><li><b>Epoka</b> = jeden przebieg przez cały zbiór treningowy. <b>Batch</b> = porcja danych na jedną aktualizację.</li></ul>`},
+{h:'Sieci neuronowe, LLM, RAG',html:`
+<ul><li><b>Neuron</b>: suma ważona wejść + bias → <b>funkcja aktywacji</b> (ReLU, sigmoid, tanh, softmax). Bez nieliniowej aktywacji wiele warstw zwija się do jednej liniowej.</li><li><b>Propagacja wsteczna</b> (backprop) liczy gradienty strat względem wag.</li><li><b>CNN</b> – obrazy (filtry konwolucyjne), <b>RNN/LSTM</b> – sekwencje, <b>Transformer</b> – dziś dominuje (język, obraz).</li></ul>
+<figure class="diagram"><svg viewBox="0 0 680 160" width="680" role="img" aria-label="Schemat RAG">
+<g font-size="13" font-weight="700" text-anchor="middle">
+<rect class="bx" x="5" y="50" width="100" height="50" rx="9"/><text x="55" y="80">Pytanie</text>
+<rect class="bx" x="135" y="50" width="110" height="50" rx="9"/><text x="190" y="72">Embedding</text><text x="190" y="88" font-size="10" class="t2" font-weight="500">tekst → wektor</text>
+<rect class="bx" x="275" y="50" width="120" height="50" rx="9" style="stroke:#047857"/><text x="335" y="72">Baza wektorowa</text><text x="335" y="88" font-size="10" class="t2" font-weight="500">najbliższe fragmenty</text>
+<rect class="bx" x="425" y="50" width="120" height="50" rx="9"/><text x="485" y="72">Prompt</text><text x="485" y="88" font-size="10" class="t2" font-weight="500">pytanie + kontekst</text>
+<rect class="bx" x="575" y="50" width="100" height="50" rx="9" style="stroke:#047857"/><text x="625" y="80">LLM → odp.</text></g>
+<path class="ln" d="M105 75H133M245 75H273M395 75H423M545 75H573"/>
+<text x="340" y="135" text-anchor="middle" font-size="12" class="t2">RAG: model dostaje świeże, własne dokumenty w prompcie – bez ponownego trenowania.</text></svg></figure>
+<table><tr><th>Pojęcie (LLM)</th><th>Znaczenie</th></tr>
+<tr><td><b>Token</b></td><td>kawałek tekstu (słowo, jego część) – jednostka, w której model „czyta”</td></tr>
+<tr><td><b>Self-attention</b></td><td>mechanizm transformera: każdy token „patrzy” na pozostałe, by ustalić kontekst</td></tr>
+<tr><td><b>Kontekst (context window)</b></td><td>maksymalna liczba tokenów, które model widzi naraz</td></tr>
+<tr><td><b>Temperature</b></td><td>wyższa = bardziej losowo/kreatywnie, niższa = bardziej deterministycznie</td></tr>
+<tr><td><b>Halucynacja</b></td><td>pewnie brzmiąca, ale zmyślona odpowiedź</td></tr>
+<tr><td><b>Fine-tuning</b></td><td>dotrenowanie modelu na własnych danych (zmienia wagi)</td></tr>
+<tr><td><b>RAG</b></td><td>dołączanie pobranych dokumentów do promptu (wagi bez zmian)</td></tr></table>
+<h4>Etyka i regulacje</h4>
+<ul><li><b>Bias</b> w danych → stronniczy model. <b>Explainability (XAI)</b> – wyjaśnialność decyzji.</li><li><b>EU AI Act</b> – podejście oparte na ryzyku: niedopuszczalne / wysokie / ograniczone / minimalne.</li><li>Prywatność: nie wklejaj danych wrażliwych do publicznych narzędzi AI.</li></ul>`}
+],
+qs:[
+{p:1,q:'Które z poniższych metod to <b>uczenie nadzorowane</b>?',o:[['Regresja liniowa',1,'Uczy się z par (wejście, znana wartość).'],['Klasyfikator kNN',1,'Korzysta z etykiet sąsiadów.'],['Drzewo decyzyjne do klasyfikacji',1,'Uczy się z etykietowanych przykładów.'],['k-means',0,'To klasteryzacja – uczenie nienadzorowane (brak etykiet).']],tip:'Jest etykieta/„poprawna odpowiedź” w danych treningowych? Nadzorowane. Brak? Nienadzorowane.'},
+{p:3,q:'Które działania pomagają ograniczyć <b>overfitting</b>?',o:[['Zwiększenie ilości danych treningowych',1,'Trudniej „zapamiętać” większy, bardziej zróżnicowany zbiór.'],['Regularyzacja (L1/L2) lub dropout',1,'Karzą nadmierną złożoność modelu.'],['Wczesne zatrzymanie treningu (early stopping)',1,'Przerywasz uczenie, gdy błąd walidacji przestaje spadać.'],['Zwiększenie złożoności modelu (więcej warstw/parametrów)',0,'Zwykle nasila overfitting.']],tip:'Znak overfittingu: świetny wynik na treningu, wyraźnie gorszy na zbiorze testowym.'},
+{p:1,q:'Model wykrył: TP=40, FP=10, FN=20. Które stwierdzenia są <b>prawdziwe</b>?',o:[['Precision wynosi 0,8',1,'40 / (40 + 10) = 0,8.'],['Recall wynosi około 0,67',1,'40 / (40 + 20) ≈ 0,667.'],['F1 to średnia arytmetyczna precision i recall',0,'F1 to średnia <b>harmoniczna</b>: 2PR/(P+R).'],['Accuracy bywa mylące przy niezbalansowanych klasach',1,'Model „zawsze mówiący NIE” przy 1% pozytywów ma 99% accuracy.']],tip:'Precision patrzy na to, co model <i>wskazał</i>. Recall patrzy na to, co <i>istniało</i> do znalezienia.'},
+{p:3,q:'Które stwierdzenia o <b>dużych modelach językowych (LLM)</b> są prawdziwe?',o:[['Architektura Transformer wykorzystuje mechanizm self-attention',1,'To fundament współczesnych LLM.'],['Model przetwarza tekst jako tokeny',1,'Tokeny to fragmenty słów, nie zawsze całe słowa.'],['Wyższa temperatura zwiększa losowość generowanych odpowiedzi',1,'Temperature bliska 0 daje odpowiedzi niemal deterministyczne.'],['LLM zawsze podaje prawdziwe informacje',0,'Modele mogą halucynować – stąd weryfikacja źródeł i RAG.']],tip:'LLM przewiduje kolejny token – nie „wie”, tylko generuje najbardziej prawdopodobną kontynuację.'},
+{p:1,q:'Które stwierdzenia o <b>RAG</b> (Retrieval-Augmented Generation) są prawdziwe?',o:[['Pobiera pasujące fragmenty dokumentów i dołącza je do promptu',1,'Dzięki temu model odpowiada na podstawie dostarczonego kontekstu.'],['Może zmniejszać ryzyko halucynacji',1,'Odpowiedź opiera się na źródłach (które można zacytować).'],['Zwykle używa embeddingów i bazy wektorowej',1,'Wyszukiwanie semantyczne po podobieństwie wektorów.'],['Wymaga ponownego trenowania całego modelu na nowych dokumentach',0,'Wagi modelu się nie zmieniają – dokumenty trafiają tylko do promptu.']],tip:'RAG = „otwarta książka”. Fine-tuning = „nauka na pamięć”.'},
+{p:3,q:'Które stwierdzenia o <b>spadku gradientu</b> są prawdziwe?',o:[['Wagi aktualizowane są w kierunku przeciwnym do gradientu funkcji straty',1,'Idziemy „w dół” po funkcji straty.'],['Zbyt duży learning rate może prowadzić do rozbieżności',1,'Kroki przeskakują minimum, strata rośnie lub oscyluje.'],['Zbyt mały learning rate sprawia, że uczenie jest bardzo wolne',1,'Dochodzenie do minimum trwa wiele iteracji.'],['Learning rate oznacza liczbę epok treningu',0,'To długość kroku aktualizacji; liczba epok to osobny hiperparametr.']],tip:'w ← w − α·∇L. α za duże: przeskoki. α za małe: ślimacze tempo.'},
+{p:1,q:'Które stwierdzenia o <b>sieciach neuronowych</b> są prawdziwe?',o:[['Funkcje aktywacji (np. ReLU) wprowadzają nieliniowość',1,'Bez nich wiele warstw działałoby jak jedna warstwa liniowa.'],['Propagacja wsteczna służy do obliczania gradientów',1,'Pozwala efektywnie aktualizować wagi wszystkich warstw.'],['Sieci konwolucyjne (CNN) są szczególnie skuteczne dla obrazów',1,'Filtry wykrywają krawędzie, tekstury i wzorce lokalne.'],['Bez funkcji aktywacji głęboka sieć modeluje dowolne zależności nieliniowe',0,'Bez nieliniowości kompozycja warstw liniowych jest nadal liniowa.']],tip:'Nieliniowość = moc wyrazu sieci.'},
+{p:3,q:'Które stwierdzenia o <b>stronniczości i regulacjach AI</b> są prawdziwe?',o:[['Stronniczość (bias) modelu może wynikać z nierównomiernych lub uprzedzonych danych treningowych',1,'Model uczy się wzorców z danych, także krzywdzących.'],['Unijny AI Act stosuje podejście oparte na poziomie ryzyka',1,'Kategorie: niedopuszczalne, wysokie, ograniczone, minimalne ryzyko.'],['Wyjaśnialność (XAI) pomaga zrozumieć, dlaczego model podjął decyzję',1,'Ważne zwłaszcza w medycynie, finansach i rekrutacji.'],['Systemy AI są zawsze obiektywne, bo opierają się na matematyce',0,'Matematyka nie usuwa uprzedzeń zawartych w danych.']],tip:'AI odzwierciedla dane. Garbage in, garbage out – także w sensie etycznym.'},
+{p:1,q:'Które praktyki są <b>poprawne</b> przy podziale i ocenie danych?',o:[['Zbiór testowy używa się dopiero na końcu do ostatecznej oceny',1,'Dzięki temu wynik jest uczciwym oszacowaniem na nowych danych.'],['Walidacja krzyżowa (cross-validation) daje stabilniejszą ocenę modelu',1,'Wielokrotnie zmienia podział na trening/walidację.'],['Dobieranie hiperparametrów na zbiorze testowym jest dobrą praktyką',0,'„Podglądanie” testu to przeciek informacji – wynik jest zawyżony.'],['Data leakage zawyża wynik modelu, który w praktyce będzie działał gorzej',1,'Model widział w treningu informacje, których nie powinien znać.']],tip:'Test = zapieczętowana koperta otwierana raz.'},
+{p:3,q:'Które stwierdzenia o <b>RL i klasteryzacji</b> są prawdziwe?',o:[['W uczeniu ze wzmocnieniem agent uczy się dzięki nagrodom za działania w środowisku',1,'Maksymalizuje skumulowaną nagrodę.'],['Klasteryzacja grupuje podobne obiekty bez użycia etykiet',1,'Np. segmentacja klientów algorytmem k-means.'],['Klasyfikacja przewiduje wartość ciągłą, a regresja kategorię',0,'Odwrotnie: klasyfikacja → kategoria, regresja → liczba.'],['PCA służy do redukcji wymiarowości danych',1,'Znajduje kierunki o największej wariancji.']],tip:'Klasyfikacja = klasa, regresja = liczba, klasteryzacja = grupy bez etykiet.'}
+]};
